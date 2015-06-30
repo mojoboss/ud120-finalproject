@@ -19,15 +19,27 @@ features_list = ['poi', 'salary', 'to_messages', 'deferral_payments', 'total_pay
 
 ### Load the dictionary containing the dataset
 data_dict = pickle.load(open("final_project_dataset.pkl", "r") )
+#Changing 'NaN' values to 0
 for key in data_dict:
     for keyc in data_dict[key]:
         if data_dict[key][keyc]=='NaN':
             data_dict[key][keyc] = 0
+
 ### Task 2: Remove outliers
 data_dict.pop('TOTAL') # As 'TOTAL  is clearly an outlier'
 
 ### Task 3: Create new feature(s)
-
+for key in data_dict:
+    if data_dict[key]['to_messages']==0:
+        data_dict[key]['to_fraction'] = 0
+    else:
+        data_dict[key]['to_fraction'] = float(data_dict[key]['from_poi_to_this_person'])/(data_dict[key]['to_messages'])
+        
+    if data_dict[key]['from_messages']==0:
+        data_dict[key]['from_fraction'] = 0
+    else:
+        data_dict[key]['from_fraction'] = float(data_dict[key]['from_this_person_to_poi'])/(data_dict[key]['from_messages'])
+    
 ### Store to my_dataset for easy export below.
 my_dataset = data_dict
 
